@@ -1,10 +1,9 @@
 package time
 
 import (
+	log "github.com/golang/glog"
 	"sync"
 	itime "time"
-
-	log "github.com/golang/glog"
 )
 
 const (

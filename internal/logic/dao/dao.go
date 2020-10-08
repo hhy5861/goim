@@ -2,11 +2,10 @@ package dao
 
 import (
 	"context"
-	"time"
-
-	"github.com/Terry-Mao/goim/internal/logic/conf"
 	"github.com/gomodule/redigo/redis"
+	"github.com/hhy5861/goim/internal/logic/conf"
 	kafka "gopkg.in/Shopify/sarama.v1"
+	"time"
 )
 
 // Dao dao.

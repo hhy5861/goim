@@ -2,15 +2,14 @@ package logic
 
 import (
 	"fmt"
+	"github.com/bilibili/discovery/naming"
+	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/internal/logic/model"
 	"math"
 	"sort"
 	"strconv"
 	"strings"
 	"sync"
-
-	"github.com/bilibili/discovery/naming"
-	"github.com/Terry-Mao/goim/internal/logic/model"
-	log "github.com/golang/glog"
 )
 
 const (

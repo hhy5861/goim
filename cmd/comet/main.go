@@ -4,6 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"github.com/bilibili/discovery/naming"
+	resolver "github.com/bilibili/discovery/naming/grpc"
+	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/internal/comet"
+	"github.com/hhy5861/goim/internal/comet/conf"
+	"github.com/hhy5861/goim/internal/comet/grpc"
+	md "github.com/hhy5861/goim/internal/logic/model"
+	"github.com/hhy5861/goim/pkg/ip"
 	"math/rand"
 	"net"
 	"os"
@@ -13,15 +21,6 @@ import (
 	"strings"
 	"syscall"
 	"time"
-
-	"github.com/bilibili/discovery/naming"
-	resolver "github.com/bilibili/discovery/naming/grpc"
-	"github.com/Terry-Mao/goim/internal/comet"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
-	"github.com/Terry-Mao/goim/internal/comet/grpc"
-	md "github.com/Terry-Mao/goim/internal/logic/model"
-	"github.com/Terry-Mao/goim/pkg/ip"
-	log "github.com/golang/glog"
 )
 
 const (
@@ -34,6 +33,7 @@ func main() {
 	if err := conf.Init(); err != nil {
 		panic(err)
 	}
+
 	rand.Seed(time.Now().UTC().UnixNano())
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	println(conf.Conf.Debug)

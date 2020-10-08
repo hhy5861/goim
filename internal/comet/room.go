@@ -1,10 +1,9 @@
 package comet
 
 import (
+	"github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/internal/comet/errors"
 	"sync"
-
-	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/comet/errors"
 )
 
 // Room is a room and store channel room info.

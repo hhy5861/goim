@@ -2,16 +2,14 @@ package main
 
 import (
 	"flag"
+	"github.com/bilibili/discovery/naming"
+	resolver "github.com/bilibili/discovery/naming/grpc"
+	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/internal/job"
+	"github.com/hhy5861/goim/internal/job/conf"
 	"os"
 	"os/signal"
 	"syscall"
-
-	"github.com/bilibili/discovery/naming"
-	"github.com/Terry-Mao/goim/internal/job"
-	"github.com/Terry-Mao/goim/internal/job/conf"
-
-	resolver "github.com/bilibili/discovery/naming/grpc"
-	log "github.com/golang/glog"
 )
 
 var (

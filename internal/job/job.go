@@ -3,16 +3,14 @@ package job
 import (
 	"context"
 	"fmt"
+	"github.com/bilibili/discovery/naming"
+	cluster "github.com/bsm/sarama-cluster"
+	"github.com/gogo/protobuf/proto"
+	log "github.com/golang/glog"
+	pb "github.com/hhy5861/goim/api/logic/grpc"
+	"github.com/hhy5861/goim/internal/job/conf"
 	"sync"
 	"time"
-
-	pb "github.com/Terry-Mao/goim/api/logic/grpc"
-	"github.com/Terry-Mao/goim/internal/job/conf"
-	"github.com/bilibili/discovery/naming"
-	"github.com/gogo/protobuf/proto"
-
-	cluster "github.com/bsm/sarama-cluster"
-	log "github.com/golang/glog"
 )
 
 // Job is push job.

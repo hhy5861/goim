@@ -4,10 +4,9 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"errors"
+	"github.com/hhy5861/goim/pkg/bufio"
 	"io"
 	"strings"
-
-	"github.com/Terry-Mao/goim/pkg/bufio"
 )
 
 var (

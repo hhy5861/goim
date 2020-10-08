@@ -42,15 +42,19 @@ func SplitInt32s(s, p string) ([]int32, error) {
 	if s == "" {
 		return nil, nil
 	}
+
 	sArr := strings.Split(s, p)
 	res := make([]int32, 0, len(sArr))
+
 	for _, sc := range sArr {
 		i, err := strconv.ParseInt(sc, 10, 32)
 		if err != nil {
 			return nil, err
 		}
+
 		res = append(res, int32(i))
 	}
+
 	return res, nil
 }
 

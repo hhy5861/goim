@@ -2,12 +2,11 @@ package http
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	log "github.com/golang/glog"
 	"net/http/httputil"
 	"runtime"
 	"time"
-
-	"github.com/gin-gonic/gin"
-	log "github.com/golang/glog"
 )
 
 func loggerHandler(c *gin.Context) {

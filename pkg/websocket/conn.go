@@ -4,9 +4,8 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"github.com/hhy5861/goim/pkg/bufio"
 	"io"
-
-	"github.com/Terry-Mao/goim/pkg/bufio"
 )
 
 const (
@@ -73,7 +72,9 @@ func (c *Conn) WriteMessage(msgType int, msg []byte) (err error) {
 	if err = c.WriteHeader(msgType, len(msg)); err != nil {
 		return
 	}
+
 	err = c.WriteBody(msg)
+
 	return
 }
 

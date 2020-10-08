@@ -3,17 +3,17 @@ package comet
 import (
 	"context"
 	"crypto/tls"
+	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/expand/comet"
+	"github.com/hhy5861/goim/internal/comet/conf"
+	"github.com/hhy5861/goim/pkg/bytes"
+	xtime "github.com/hhy5861/goim/pkg/time"
+	"github.com/hhy5861/goim/pkg/websocket"
 	"io"
 	"net"
 	"strings"
 	"time"
-
-	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
-	"github.com/Terry-Mao/goim/pkg/bytes"
-	xtime "github.com/Terry-Mao/goim/pkg/time"
-	"github.com/Terry-Mao/goim/pkg/websocket"
-	log "github.com/golang/glog"
 )
 
 // InitWebsocket listen all tcp.bind and start accept connections.
@@ -166,6 +166,7 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 		ws      *websocket.Conn // websocket
 		req     *websocket.Request
 	)
+
 	// reader
 	ch.Reader.ResetBuffer(conn, rb.Bytes())
 	ctx, cancel := context.WithCancel(context.Background())
@@ -181,7 +182,12 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 	// websocket
 	ch.IP, _, _ = net.SplitHostPort(conn.RemoteAddr().String())
 	step = 1
-	if req, err = websocket.ReadRequest(rr); err != nil || req.RequestURI != "/sub" {
+
+	auth := comet.NewAuth(s.c.System.KeySalt)
+	if req, err = websocket.ReadRequest(rr); err != nil ||
+		req.RequestURI != auth.BuildApiPath(s.c.System.ContextPath, s.c.System.ApiPath) ||
+		!auth.CheckApiKey(req.Values.Get(comet.ApiKeyParamName)) {
+
 		conn.Close()
 		tr.Del(trd)
 		rp.Put(rb)
@@ -190,6 +196,7 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 		}
 		return
 	}
+
 	// writer
 	wb := wp.Get()
 	ch.Writer.ResetBuffer(conn, wb.Bytes())
@@ -204,8 +211,9 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 		}
 		return
 	}
+
 	// must not setadv, only used in auth
-	step = 3
+	/*step = 3
 	if p, err = ch.CliProto.Set(); err == nil {
 		if ch.Mid, ch.Key, rid, accepts, hb, err = s.authWebsocket(ctx, ws, p, req.Header.Get("Cookie")); err == nil {
 			ch.Watch(accepts...)
@@ -216,6 +224,7 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 			}
 		}
 	}
+
 	step = 4
 	if err != nil {
 		ws.Close()
@@ -226,17 +235,18 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 			log.Errorf("key: %s remoteIP: %s step: %d ws handshake failed error(%v)", ch.Key, conn.RemoteAddr().String(), step, err)
 		}
 		return
-	}
+	}*/
+
 	trd.Key = ch.Key
 	tr.Set(trd, hb)
 	white = whitelist.Contains(ch.Mid)
 	if white {
 		whitelist.Printf("key: %s[%s] auth\n", ch.Key, rid)
 	}
+
 	// hanshake ok start dispatch goroutine
 	step = 5
 	go s.dispatchWebsocket(ws, wp, wb, ch)
-	serverHeartbeat := s.RandServerHearbeat()
 	for {
 		if p, err = ch.CliProto.Set(); err != nil {
 			break
@@ -250,34 +260,38 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 		if white {
 			whitelist.Printf("key: %s read proto:%v\n", ch.Key, p)
 		}
-		if p.Op == grpc.OpHeartbeat {
-			tr.Set(trd, hb)
-			p.Op = grpc.OpHeartbeatReply
-			p.Body = nil
-			// NOTE: send server heartbeat for a long time
-			if now := time.Now(); now.Sub(lastHB) > serverHeartbeat {
-				if err1 := s.Heartbeat(ctx, ch.Mid, ch.Key); err1 == nil {
-					lastHB = now
-				}
-			}
-			if conf.Conf.Debug {
-				log.Infof("websocket heartbeat receive key:%s, mid:%d", ch.Key, ch.Mid)
-			}
-			step++
-		} else {
-			if err = s.Operate(ctx, p, ch, b); err != nil {
-				break
-			}
+
+		//if p.Op == grpc.OpHeartbeat {
+		//	tr.Set(trd, hb)
+		//	p.Op = grpc.OpHeartbeatReply
+		//	p.Body = nil
+		//	// NOTE: send server heartbeat for a long time
+		//	if now := time.Now(); now.Sub(lastHB) > serverHeartbeat {
+		//		if err1 := s.Heartbeat(ctx, ch.Mid, ch.Key); err1 == nil {
+		//			lastHB = now
+		//		}
+		//	}
+		//
+		//	if conf.Conf.Debug {
+		//		log.Infof("websocket heartbeat receive key:%s, mid:%d", ch.Key, ch.Mid)
+		//	}
+		//	step++
+		//} else {
+		if err = s.Operate(ctx, p, ch, b); err != nil {
+			break
 		}
+		//}
 		if white {
 			whitelist.Printf("key: %s process proto:%v\n", ch.Key, p)
 		}
 		ch.CliProto.SetAdv()
 		ch.Signal()
+
 		if white {
 			whitelist.Printf("key: %s signal\n", ch.Key)
 		}
 	}
+
 	if white {
 		whitelist.Printf("key: %s server tcp error(%v)\n", ch.Key, err)
 	}
@@ -304,26 +318,43 @@ func (s *Server) ServeWebsocket(conn net.Conn, rp, wp *bytes.Pool, tr *xtime.Tim
 // for each incoming connection.  dispatch blocks; the caller typically
 // invokes it in a go statement.
 func (s *Server) dispatchWebsocket(ws *websocket.Conn, wp *bytes.Pool, wb *bytes.Buffer, ch *Channel) {
+	ticker := time.NewTicker(s.RandServerHearbeat())
+
+	defer func() {
+		ticker.Stop()
+	}()
+
 	var (
 		err    error
 		finish bool
 		online int32
 		white  = whitelist.Contains(ch.Mid)
 	)
+
 	if conf.Conf.Debug {
 		log.Infof("key: %s start dispatch tcp goroutine", ch.Key)
 	}
+
 	for {
 		if white {
 			whitelist.Printf("key: %s wait proto ready\n", ch.Key)
 		}
+
 		var p = ch.Ready()
 		if white {
 			whitelist.Printf("key: %s proto ready\n", ch.Key)
 		}
-		if conf.Conf.Debug {
-			log.Infof("key:%s dispatch msg:%s", ch.Key, p.Body)
+
+		select {
+		case p := <-ch.signal:
+			if conf.Conf.Debug {
+				log.Infof("key:%s dispatch msg:%s", ch.Key, p.Body)
+			}
+
+		case <-ticker.C:
+
 		}
+
 		switch p {
 		case grpc.ProtoFinish:
 			if white {
@@ -334,6 +365,7 @@ func (s *Server) dispatchWebsocket(ws *websocket.Conn, wp *bytes.Pool, wb *bytes
 			}
 			finish = true
 			goto failed
+
 		case grpc.ProtoReady:
 			// fetch message from svrbox(client send)
 			for {
@@ -361,6 +393,7 @@ func (s *Server) dispatchWebsocket(ws *websocket.Conn, wp *bytes.Pool, wb *bytes
 				p.Body = nil // avoid memory leak
 				ch.CliProto.GetAdv()
 			}
+
 		default:
 			if white {
 				whitelist.Printf("key: %s start write server proto%v\n", ch.Key, p)
@@ -390,15 +423,19 @@ failed:
 	if white {
 		whitelist.Printf("key: %s dispatch tcp error(%v)\n", ch.Key, err)
 	}
+
 	if err != nil && err != io.EOF && err != websocket.ErrMessageClose {
 		log.Errorf("key: %s dispatch ws error(%v)", ch.Key, err)
 	}
+
 	ws.Close()
 	wp.Put(wb)
+
 	// must ensure all channel message discard, for reader won't blocking Signal
 	for !finish {
-		finish = (ch.Ready() == grpc.ProtoFinish)
+		finish = ch.Ready() == grpc.ProtoFinish
 	}
+
 	if conf.Conf.Debug {
 		log.Infof("key: %s dispatch goroutine exit", ch.Key)
 	}
@@ -410,20 +447,23 @@ func (s *Server) authWebsocket(ctx context.Context, ws *websocket.Conn, p *grpc.
 		if err = p.ReadWebsocket(ws); err != nil {
 			return
 		}
+
 		if p.Op == grpc.OpAuth {
 			break
 		} else {
 			log.Errorf("ws request operation(%d) not auth", p.Op)
 		}
 	}
+
 	if mid, key, rid, accepts, hb, err = s.Connect(ctx, p, cookie); err != nil {
 		return
 	}
-	p.Op = grpc.OpAuthReply
+
 	p.Body = nil
 	if err = p.WriteWebsocket(ws); err != nil {
 		return
 	}
+
 	err = ws.Flush()
 	return
 }

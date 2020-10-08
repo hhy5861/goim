@@ -3,21 +3,20 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/bilibili/discovery/naming"
+	resolver "github.com/bilibili/discovery/naming/grpc"
+	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/internal/logic"
+	"github.com/hhy5861/goim/internal/logic/conf"
+	"github.com/hhy5861/goim/internal/logic/grpc"
+	"github.com/hhy5861/goim/internal/logic/http"
+	"github.com/hhy5861/goim/internal/logic/model"
+	"github.com/hhy5861/goim/pkg/ip"
 	"net"
 	"os"
 	"os/signal"
 	"strconv"
 	"syscall"
-
-	"github.com/bilibili/discovery/naming"
-	resolver "github.com/bilibili/discovery/naming/grpc"
-	"github.com/Terry-Mao/goim/internal/logic"
-	"github.com/Terry-Mao/goim/internal/logic/conf"
-	"github.com/Terry-Mao/goim/internal/logic/grpc"
-	"github.com/Terry-Mao/goim/internal/logic/http"
-	"github.com/Terry-Mao/goim/internal/logic/model"
-	"github.com/Terry-Mao/goim/pkg/ip"
-	log "github.com/golang/glog"
 )
 
 const (

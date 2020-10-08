@@ -2,12 +2,10 @@ package logic
 
 import (
 	"context"
-	"testing"
-
 	"github.com/bilibili/discovery/naming"
-	"github.com/Terry-Mao/goim/internal/logic/model"
-
+	"github.com/hhy5861/goim/internal/logic/model"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestNodes(t *testing.T) {

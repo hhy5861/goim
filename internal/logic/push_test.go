@@ -2,9 +2,8 @@ package logic
 
 import (
 	"context"
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestPushKeys(t *testing.T) {

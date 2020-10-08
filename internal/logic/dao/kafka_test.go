@@ -2,9 +2,8 @@ package dao
 
 import (
 	"context"
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestDaoPushMsg(t *testing.T) {

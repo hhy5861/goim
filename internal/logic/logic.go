@@ -2,14 +2,13 @@ package logic
 
 import (
 	"context"
-	"strconv"
-	"time"
-
-	"github.com/Terry-Mao/goim/internal/logic/conf"
-	"github.com/Terry-Mao/goim/internal/logic/dao"
-	"github.com/Terry-Mao/goim/internal/logic/model"
 	"github.com/bilibili/discovery/naming"
 	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/internal/logic/conf"
+	"github.com/hhy5861/goim/internal/logic/dao"
+	"github.com/hhy5861/goim/internal/logic/model"
+	"strconv"
+	"time"
 )
 
 const (

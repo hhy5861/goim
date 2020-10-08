@@ -159,6 +159,7 @@ func (b *Reader) Pop(n int) ([]byte, error) {
 		b.r += n
 		return d, err
 	}
+
 	return nil, err
 }
 

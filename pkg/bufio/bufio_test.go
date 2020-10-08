@@ -8,14 +8,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	. "github.com/hhy5861/goim/pkg/bufio"
 	"io"
 	"io/ioutil"
 	"strings"
 	"testing"
 	"testing/iotest"
 	"time"
-
-	. "github.com/Terry-Mao/goim/pkg/bufio"
 )
 
 // Reads from a reader and rot13s the result.

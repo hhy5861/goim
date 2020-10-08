@@ -3,17 +3,15 @@ package job
 import (
 	"context"
 	"fmt"
+	"github.com/bilibili/discovery/naming"
+	log "github.com/golang/glog"
+	comet "github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/internal/job/conf"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"net/url"
 	"sync/atomic"
 	"time"
-
-	"github.com/bilibili/discovery/naming"
-	comet "github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/job/conf"
-
-	log "github.com/golang/glog"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/keepalive"
 )
 
 var (

@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
-	"testing"
-
-	"github.com/Terry-Mao/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/api/comet/grpc"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestConnect(t *testing.T) {

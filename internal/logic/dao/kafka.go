@@ -2,12 +2,11 @@ package dao
 
 import (
 	"context"
-	"strconv"
-
-	pb "github.com/Terry-Mao/goim/api/logic/grpc"
 	"github.com/gogo/protobuf/proto"
 	log "github.com/golang/glog"
-	sarama "gopkg.in/Shopify/sarama.v1"
+	pb "github.com/hhy5861/goim/api/logic/grpc"
+	"gopkg.in/Shopify/sarama.v1"
+	"strconv"
 )
 
 // PushMsg push a message to databus.

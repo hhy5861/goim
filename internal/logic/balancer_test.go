@@ -1,11 +1,10 @@
 package logic
 
 import (
+	"github.com/bilibili/discovery/naming"
+	"github.com/hhy5861/goim/internal/logic/model"
 	"sort"
 	"testing"
-
-	"github.com/bilibili/discovery/naming"
-	"github.com/Terry-Mao/goim/internal/logic/model"
 )
 
 func TestWeightedNode(t *testing.T) {

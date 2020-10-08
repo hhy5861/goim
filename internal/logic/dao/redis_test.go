@@ -2,10 +2,9 @@ package dao
 
 import (
 	"context"
-	"testing"
-
-	"github.com/Terry-Mao/goim/internal/logic/model"
+	"github.com/hhy5861/goim/internal/logic/model"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestDaopingRedis(t *testing.T) {

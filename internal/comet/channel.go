@@ -1,10 +1,9 @@
 package comet
 
 import (
+	"github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/pkg/bufio"
 	"sync"
-
-	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/pkg/bufio"
 )
 
 // Channel used by message pusher send msg to write goroutine.
@@ -16,7 +15,6 @@ type Channel struct {
 	Reader   bufio.Reader
 	Next     *Channel
 	Prev     *Channel
-
 	Mid      int64
 	Key      string
 	IP       string

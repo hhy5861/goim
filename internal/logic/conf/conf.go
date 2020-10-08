@@ -2,14 +2,12 @@ package conf
 
 import (
 	"flag"
+	"github.com/BurntSushi/toml"
+	"github.com/bilibili/discovery/naming"
+	xtime "github.com/hhy5861/goim/pkg/time"
 	"os"
 	"strconv"
 	"time"
-
-	"github.com/bilibili/discovery/naming"
-	xtime "github.com/Terry-Mao/goim/pkg/time"
-
-	"github.com/BurntSushi/toml"
 )
 
 var (

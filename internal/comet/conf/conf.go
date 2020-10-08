@@ -2,14 +2,13 @@ package conf
 
 import (
 	"flag"
+	"github.com/BurntSushi/toml"
+	"github.com/bilibili/discovery/naming"
+	xtime "github.com/hhy5861/goim/pkg/time"
 	"os"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/bilibili/discovery/naming"
-	"github.com/BurntSushi/toml"
-	xtime "github.com/Terry-Mao/goim/pkg/time"
 )
 
 var (
@@ -25,6 +24,10 @@ var (
 
 	// Conf config
 	Conf *Config
+)
+
+const (
+	DefaultApiPath = "v0/channels"
 )
 
 func init() {
@@ -102,6 +105,9 @@ func Default() *Config {
 			RoutineAmount: 32,
 			RoutineSize:   1024,
 		},
+		System: &System{
+			ApiPath: DefaultApiPath,
+		},
 	}
 }
 
@@ -117,6 +123,7 @@ type Config struct {
 	RPCClient *RPCClient
 	RPCServer *RPCServer
 	Whitelist *Whitelist
+	System    *System
 }
 
 // Env is env config.
@@ -193,4 +200,10 @@ type Bucket struct {
 type Whitelist struct {
 	Whitelist []int64
 	WhiteLog  string
+}
+
+type System struct {
+	KeySalt     string
+	ApiPath     string
+	ContextPath string
 }

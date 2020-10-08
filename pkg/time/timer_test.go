@@ -1,10 +1,9 @@
 package time
 
 import (
+	log "github.com/golang/glog"
 	"testing"
 	"time"
-
-	log "github.com/golang/glog"
 )
 
 func TestTimer(t *testing.T) {

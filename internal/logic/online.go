@@ -2,10 +2,9 @@ package logic
 
 import (
 	"context"
+	"github.com/hhy5861/goim/internal/logic/model"
 	"sort"
 	"strings"
-
-	"github.com/Terry-Mao/goim/internal/logic/model"
 )
 
 var (

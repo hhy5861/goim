@@ -2,10 +2,8 @@ package logic
 
 import (
 	"context"
-
-	"github.com/Terry-Mao/goim/internal/logic/model"
-
 	log "github.com/golang/glog"
+	"github.com/hhy5861/goim/internal/logic/model"
 )
 
 // PushKeys push a message by keys.

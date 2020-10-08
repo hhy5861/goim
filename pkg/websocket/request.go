@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
-
-	"github.com/Terry-Mao/goim/pkg/bufio"
+	"github.com/hhy5861/goim/pkg/bufio"
 )
 
 // Request request.
@@ -16,8 +16,8 @@ type Request struct {
 	Proto      string
 	Host       string
 	Header     http.Header
-
-	reader *bufio.Reader
+	Values     url.Values
+	reader     *bufio.Reader
 }
 
 // ReadRequest reads and parses an incoming request from b.
@@ -30,12 +30,15 @@ func ReadRequest(r *bufio.Reader) (req *Request, err error) {
 	if b, err = req.readLine(); err != nil {
 		return
 	}
-	if req.Method, req.RequestURI, req.Proto, ok = parseRequestLine(string(b)); !ok {
+
+	if req.Method, req.RequestURI, req.Proto, req.Values, ok = parseRequestLine(string(b)); !ok {
 		return nil, fmt.Errorf("malformed HTTP request %s", b)
 	}
+
 	if req.Header, err = req.readMIMEHeader(); err != nil {
 		return
 	}
+
 	req.Host = req.Header.Get("Host")
 	return req, nil
 }
@@ -90,14 +93,20 @@ func (r *Request) readMIMEHeader() (header http.Header, err error) {
 }
 
 // parseRequestLine parses "GET /foo HTTP/1.1" into its three parts.
-func parseRequestLine(line string) (method, requestURI, proto string, ok bool) {
+func parseRequestLine(line string) (method, requestURI, proto string, values url.Values, ok bool) {
 	s1 := strings.Index(line, " ")
 	s2 := strings.Index(line[s1+1:], " ")
 	if s1 < 0 || s2 < 0 {
 		return
 	}
 	s2 += s1 + 1
-	return line[:s1], line[s1+1 : s2], line[s2+1:], true
+
+	path, value, err := parseUrlPath(line[s1+1 : s2])
+	if err != nil {
+		return
+	}
+
+	return line[:s1], path, line[s2+1:], value, true
 }
 
 // trim returns s with leading and trailing spaces and tabs removed.
@@ -112,4 +121,22 @@ func trim(s []byte) []byte {
 		n--
 	}
 	return s[i:n]
+}
+
+func parseUrlPath(path string) (string, url.Values, error) {
+	var (
+		values url.Values
+	)
+
+	u, err := url.Parse(path)
+	if err != nil {
+		return "", nil, err
+	}
+
+	values, err = url.ParseQuery(u.RawQuery)
+	if err != nil {
+		return u.Path, values, nil
+	}
+
+	return u.Path, values, nil
 }

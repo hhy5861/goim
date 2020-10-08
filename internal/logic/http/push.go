@@ -2,9 +2,8 @@ package http
 
 import (
 	"context"
-	"io/ioutil"
-
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 )
 
 func (s *Server) pushKeys(c *gin.Context) {

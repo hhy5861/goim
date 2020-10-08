@@ -1,10 +1,9 @@
 package comet
 
 import (
+	"github.com/hhy5861/goim/internal/comet/conf"
 	"log"
 	"os"
-
-	"github.com/Terry-Mao/goim/internal/comet/conf"
 )
 
 var whitelist *Whitelist

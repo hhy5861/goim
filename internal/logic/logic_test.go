@@ -3,10 +3,9 @@ package logic
 import (
 	"context"
 	"flag"
+	"github.com/hhy5861/goim/internal/logic/conf"
 	"os"
 	"testing"
-
-	"github.com/Terry-Mao/goim/internal/logic/conf"
 )
 
 var (

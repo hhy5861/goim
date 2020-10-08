@@ -1,14 +1,12 @@
 package websocket
 
 import (
+	"github.com/hhy5861/goim/pkg/bufio"
+	"golang.org/x/net/websocket"
 	"net"
 	"reflect"
 	"testing"
 	"time"
-
-	"golang.org/x/net/websocket"
-
-	"github.com/Terry-Mao/goim/pkg/bufio"
 )
 
 func TestServer(t *testing.T) {

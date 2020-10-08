@@ -2,16 +2,14 @@ package grpc
 
 import (
 	"context"
-	"net"
-	"time"
-
-	pb "github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/comet"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
-	"github.com/Terry-Mao/goim/internal/comet/errors"
-
+	pb "github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/internal/comet"
+	"github.com/hhy5861/goim/internal/comet/conf"
+	"github.com/hhy5861/goim/internal/comet/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
+	"net"
+	"time"
 )
 
 // New comet grpc server.
@@ -19,9 +17,9 @@ func New(c *conf.RPCServer, s *comet.Server) *grpc.Server {
 	keepParams := grpc.KeepaliveParams(keepalive.ServerParameters{
 		MaxConnectionIdle:     time.Duration(c.IdleTimeout),
 		MaxConnectionAgeGrace: time.Duration(c.ForceCloseWait),
-		Time:             time.Duration(c.KeepAliveInterval),
-		Timeout:          time.Duration(c.KeepAliveTimeout),
-		MaxConnectionAge: time.Duration(c.MaxLifeTime),
+		Time:                  time.Duration(c.KeepAliveInterval),
+		Timeout:               time.Duration(c.KeepAliveTimeout),
+		MaxConnectionAge:      time.Duration(c.MaxLifeTime),
 	})
 	srv := grpc.NewServer(keepParams)
 	pb.RegisterCometServer(srv, &server{s})

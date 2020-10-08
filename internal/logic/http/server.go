@@ -1,10 +1,9 @@
 package http
 
 import (
-	"github.com/Terry-Mao/goim/internal/logic"
-	"github.com/Terry-Mao/goim/internal/logic/conf"
-
 	"github.com/gin-gonic/gin"
+	"github.com/hhy5861/goim/internal/logic"
+	"github.com/hhy5861/goim/internal/logic/conf"
 )
 
 // Server is http server.

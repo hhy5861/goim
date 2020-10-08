@@ -3,12 +3,11 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"time"
-
-	"github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/logic/model"
 	log "github.com/golang/glog"
 	"github.com/google/uuid"
+	"github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/internal/logic/model"
+	"time"
 )
 
 // Connect connected a conn.

@@ -4,13 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
-
-	"github.com/Terry-Mao/goim/internal/logic/model"
 	log "github.com/golang/glog"
 	"github.com/gomodule/redigo/redis"
-
+	"github.com/hhy5861/goim/internal/logic/model"
 	"github.com/zhenjl/cityhash"
+	"strconv"
 )
 
 const (

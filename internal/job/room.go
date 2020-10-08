@@ -2,12 +2,11 @@ package job
 
 import (
 	"errors"
-	"time"
-
-	comet "github.com/Terry-Mao/goim/api/comet/grpc"
-	"github.com/Terry-Mao/goim/internal/job/conf"
-	"github.com/Terry-Mao/goim/pkg/bytes"
 	log "github.com/golang/glog"
+	comet "github.com/hhy5861/goim/api/comet/grpc"
+	"github.com/hhy5861/goim/internal/job/conf"
+	"github.com/hhy5861/goim/pkg/bytes"
+	"time"
 )
 
 var (

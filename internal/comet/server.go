@@ -2,16 +2,15 @@ package comet
 
 import (
 	"context"
-	"math/rand"
-	"time"
-
-	logic "github.com/Terry-Mao/goim/api/logic/grpc"
-	"github.com/Terry-Mao/goim/internal/comet/conf"
 	log "github.com/golang/glog"
+	logic "github.com/hhy5861/goim/api/logic/grpc"
+	"github.com/hhy5861/goim/internal/comet/conf"
 	"github.com/zhenjl/cityhash"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/keepalive"
+	"math/rand"
+	"time"
 )
 
 const (
@@ -96,7 +95,7 @@ func (s *Server) Bucket(subKey string) *Bucket {
 
 // RandServerHearbeat rand server heartbeat.
 func (s *Server) RandServerHearbeat() time.Duration {
-	return (minServerHeartbeat + time.Duration(rand.Int63n(int64(maxServerHeartbeat-minServerHeartbeat))))
+	return minServerHeartbeat + time.Duration(rand.Int63n(int64(maxServerHeartbeat-minServerHeartbeat)))
 }
 
 // Close close the server.
