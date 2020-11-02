@@ -2,10 +2,10 @@
 [discovery]
     nodes = ["127.0.0.1:7171"]
     weight = 10
-    Region = "china"
-    Zone = "sh"
-    Host = "job"
-    Env = "dev"
+    region = "china"
+    zone = "sh"
+    host = "job"
+    env = "dev"
 
 [kafka]
     topic = "goim-push-topic"

@@ -26,12 +26,15 @@ func Upgrade(rwc io.ReadWriteCloser, rr *bufio.Reader, wr *bufio.Writer, req *Re
 	if req.Method != "GET" {
 		return nil, ErrBadRequestMethod
 	}
+
 	if req.Header.Get("Sec-Websocket-Version") != "13" {
 		return nil, ErrBadWebSocketVersion
 	}
+
 	if strings.ToLower(req.Header.Get("Upgrade")) != "websocket" {
 		return nil, ErrNotWebSocket
 	}
+
 	if !strings.Contains(strings.ToLower(req.Header.Get("Connection")), "upgrade") {
 		return nil, ErrNotWebSocket
 	}
@@ -39,11 +42,13 @@ func Upgrade(rwc io.ReadWriteCloser, rr *bufio.Reader, wr *bufio.Writer, req *Re
 	if challengeKey == "" {
 		return nil, ErrChallengeResponse
 	}
+
 	_, _ = wr.WriteString("HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n")
 	_, _ = wr.WriteString("Sec-WebSocket-Accept: " + computeAcceptKey(challengeKey) + "\r\n\r\n")
 	if err = wr.Flush(); err != nil {
 		return
 	}
+
 	return newConn(rwc, rr, wr), nil
 }
 
@@ -51,5 +56,6 @@ func computeAcceptKey(challengeKey string) string {
 	h := sha1.New()
 	_, _ = h.Write([]byte(challengeKey))
 	_, _ = h.Write(keyGUID)
+
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
